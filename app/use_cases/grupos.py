@@ -14,3 +14,6 @@ def create_grupo(db: Session, grupo_in: GrupoInput):
     )
     db.add(grupo)
     db.commit()
+
+def get_grupos(db: Session):
+    return db.query(GrupoORM).all()

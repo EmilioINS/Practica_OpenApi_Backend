@@ -38,3 +38,49 @@ def create_alumno(db: Session, alumno_in: AlumnoInput) -> Alumno:
     db.commit()
     db.refresh(alumno)
     return Alumno.model_validate(alumno)
+
+from app.domain.entities import AlumnoUpdate
+
+def update_alumno(db: Session, id_alumno: int, alumno_in: AlumnoUpdate) -> Alumno:
+    alumno = db.query(AlumnoORM).filter(AlumnoORM.id_alumno == id_alumno).first()
+    if not alumno:
+        raise HTTPException(status_code=404, detail="Alumno no encontrado")
+    
+    if alumno_in.matricula and alumno_in.matricula != alumno.matricula:
+        if db.query(AlumnoORM).filter(AlumnoORM.matricula == alumno_in.matricula).first():
+            raise HTTPException(status_code=400, detail="Matrícula ya registrada")
+        alumno.matricula = alumno_in.matricula
+        
+    if alumno_in.correo and alumno_in.correo != alumno.correo:
+        if db.query(AlumnoORM).filter(AlumnoORM.correo == alumno_in.correo).first():
+            raise HTTPException(status_code=400, detail="Correo ya registrado")
+        alumno.correo = alumno_in.correo
+        
+    if alumno_in.nombre:
+        alumno.nombre = alumno_in.nombre
+        
+    if alumno_in.password and alumno.id_usuario:
+        usuario = db.query(Usuario).filter(Usuario.id == alumno.id_usuario).first()
+        if usuario:
+            usuario.hashed_password = get_password_hash(alumno_in.password)
+
+    db.commit()
+    db.refresh(alumno)
+    return Alumno.model_validate(alumno)
+
+def delete_alumno(db: Session, id_alumno: int):
+    alumno = db.query(AlumnoORM).filter(AlumnoORM.id_alumno == id_alumno).first()
+    if not alumno:
+        raise HTTPException(status_code=404, detail="Alumno no encontrado")
+    
+    id_usuario = alumno.id_usuario
+    db.delete(alumno)
+    
+    # Cascade delete user if exists
+    if id_usuario:
+        usuario = db.query(Usuario).filter(Usuario.id == id_usuario).first()
+        if usuario:
+            db.delete(usuario)
+            
+    db.commit()
+    return {"message": "Alumno eliminado correctamente"}

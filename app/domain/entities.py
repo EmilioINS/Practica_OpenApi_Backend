@@ -11,6 +11,17 @@ class LoginResponse(BaseModel):
     token: str
     expiresIn: int
 
+class RegisterRequest(BaseModel):
+    username: str
+    password: str
+
+class UsuarioResponse(BaseModel):
+    id: int
+    username: str
+
+    class Config:
+        from_attributes = True
+
 # Materias
 class MateriaBase(BaseModel):
     clave_materia: str
@@ -36,6 +47,12 @@ class AlumnoBase(BaseModel):
 class AlumnoInput(AlumnoBase):
     password: Optional[str] = None # Added for auth
 
+class AlumnoUpdate(BaseModel):
+    matricula: Optional[str] = None
+    nombre: Optional[str] = None
+    correo: Optional[EmailStr] = None
+    password: Optional[str] = None
+
 class Alumno(AlumnoBase):
     id_alumno: int
 
@@ -46,6 +63,29 @@ class Alumno(AlumnoBase):
 class GrupoInput(BaseModel):
     nombre_grupo: str
     id_materia: int
+
+class Grupo(GrupoInput):
+    id_grupo: int
+
+    class Config:
+        from_attributes = True
+
+# Equipos
+class Equipo(BaseModel):
+    id_equipo: int
+    nombre_equipo: str
+    id_grupo: int
+
+    class Config:
+        from_attributes = True
+
+# Criterios
+class CriterioEvaluacion(BaseModel):
+    id_criterio: int
+    descripcion: str
+
+    class Config:
+        from_attributes = True
 
 # Exposiciones
 class Exposicion(BaseModel):

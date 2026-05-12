@@ -16,3 +16,11 @@ def create_evaluacion(
     """Registrar evaluación completa mediante rúbrica"""
     eval_uc.create_evaluacion(db, evaluacion)
     return {"message": "Evaluación registrada correctamente"}
+
+from typing import List
+from app.domain.entities import CriterioEvaluacion
+
+@router.get("/criterios", response_model=List[CriterioEvaluacion])
+def get_criterios(db: Session = Depends(get_db)):
+    """Obtener todos los criterios de evaluación"""
+    return eval_uc.get_criterios(db)

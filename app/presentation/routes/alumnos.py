@@ -27,3 +27,24 @@ def create_alumno(
 ):
     """Registrar un nuevo alumno"""
     return alumnos_uc.create_alumno(db, alumno)
+
+from app.domain.entities import AlumnoUpdate
+
+@router.put("/{id_alumno}", response_model=Alumno)
+def update_alumno(
+    id_alumno: int,
+    alumno: AlumnoUpdate,
+    db: Session = Depends(get_db),
+    user_id: str = Depends(get_current_user_id)
+):
+    """Actualizar datos de un alumno"""
+    return alumnos_uc.update_alumno(db, id_alumno, alumno)
+
+@router.delete("/{id_alumno}")
+def delete_alumno(
+    id_alumno: int,
+    db: Session = Depends(get_db),
+    user_id: str = Depends(get_current_user_id)
+):
+    """Eliminar un alumno"""
+    return alumnos_uc.delete_alumno(db, id_alumno)

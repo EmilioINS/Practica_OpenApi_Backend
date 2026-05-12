@@ -18,3 +18,15 @@ def get_materias(
 ):
     """Listar materias con paginación"""
     return materias_uc.get_materias(db, page, size, nombre)
+
+from app.domain.entities import MateriaBase, Materia
+from fastapi import status
+
+@router.post("", response_model=Materia, status_code=status.HTTP_201_CREATED)
+def create_materia(
+    materia: MateriaBase,
+    db: Session = Depends(get_db),
+    user_id: str = Depends(get_current_user_id)
+):
+    """Crear una nueva materia"""
+    return materias_uc.create_materia(db, materia)

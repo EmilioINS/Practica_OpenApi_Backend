@@ -40,3 +40,6 @@ def create_evaluacion(db: Session, eval_in: EvaluacionInput):
         db.add(nuevo_detalle)
         
     db.commit()
+
+def get_criterios(db: Session):
+    return db.query(CriterioEvaluacionORM).all()
