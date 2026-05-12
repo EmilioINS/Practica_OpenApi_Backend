@@ -16,3 +16,11 @@ def create_grupo(
     """Crear un nuevo grupo escolar"""
     grupos_uc.create_grupo(db, grupo)
     return {"message": "Grupo creado exitosamente"}
+
+from typing import List
+from app.domain.entities import Grupo
+
+@router.get("", response_model=List[Grupo])
+def get_grupos(db: Session = Depends(get_db)):
+    """Obtener lista de todos los grupos"""
+    return grupos_uc.get_grupos(db)

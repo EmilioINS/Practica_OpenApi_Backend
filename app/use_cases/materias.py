@@ -20,3 +20,13 @@ def get_materias(db: Session, page: int = 0, size: int = 10, nombre: Optional[st
         totalElements=total_elements,
         totalPages=total_pages
     )
+
+def create_materia(db: Session, materia_in: Materia) -> Materia:
+    nueva_materia = MateriaORM(
+        clave_materia=materia_in.clave_materia,
+        nombre_materia=materia_in.nombre_materia
+    )
+    db.add(nueva_materia)
+    db.commit()
+    db.refresh(nueva_materia)
+    return Materia.model_validate(nueva_materia)
