@@ -6,7 +6,7 @@ from app.infrastructure.security import get_current_user_id
 
 router = APIRouter(prefix="/api/v1/stats", tags=["Dashboard Stats"])
 
-@router.get("/")
+@router.get("")
 def get_stats(db: Session = Depends(get_db), current_user: str = Depends(get_current_user_id)):
     """Obtiene las estadísticas globales para el dashboard"""
     return stats_use_cases.get_dashboard_stats(db)
