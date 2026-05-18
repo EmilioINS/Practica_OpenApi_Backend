@@ -23,3 +23,9 @@ def get_grupo_by_id(db: Session, id_grupo: int):
     if not grupo:
         raise HTTPException(status_code=404, detail="Grupo no encontrado")
     return grupo
+
+def get_grupo_by_id(db: Session, id_grupo: int):
+    grupo = db.query(GrupoORM).filter(GrupoORM.id_grupo == id_grupo).first()
+    if not grupo:
+        raise HTTPException(status_code=404, detail="Grupo no encontrado")
+    return grupo

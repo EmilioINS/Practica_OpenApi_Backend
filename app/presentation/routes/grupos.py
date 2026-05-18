@@ -31,3 +31,10 @@ from app.domain.entities import GrupoDetail
 def get_grupo_detalles(id_grupo: int, db: Session = Depends(get_db)):
     """Obtener detalles completos de un grupo incluyendo equipos e integrantes"""
     return grupos_uc.get_grupo_by_id(db, id_grupo)
+
+from app.domain.entities import GrupoDetail
+
+@router.get("/{id_grupo}", response_model=GrupoDetail)
+def get_grupo_detalles(id_grupo: int, db: Session = Depends(get_db)):
+    """Obtener detalles completos de un grupo incluyendo equipos e integrantes"""
+    return grupos_uc.get_grupo_by_id(db, id_grupo)

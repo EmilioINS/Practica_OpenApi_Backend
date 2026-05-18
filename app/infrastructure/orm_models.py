@@ -46,6 +46,7 @@ class EquipoORM(Base):
     grupo = relationship("GrupoORM", back_populates="equipos")
     exposiciones = relationship("ExposicionORM", back_populates="equipo")
     integrantes = relationship("AlumnoORM", back_populates="equipo")
+    integrantes = relationship("AlumnoORM", back_populates="equipo")
 
 class ExposicionORM(Base):
     __tablename__ = "exposiciones"

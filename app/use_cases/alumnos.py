@@ -113,3 +113,32 @@ def unassign_alumno(db: Session, id_alumno: int) -> Alumno:
     db.commit()
     db.refresh(alumno)
     return Alumno.model_validate(alumno)
+
+def get_available_alumnos(db: Session) -> List[Alumno]:
+    alumnos_orm = db.query(AlumnoORM).filter(AlumnoORM.id_equipo == None).all()
+    return [Alumno.model_validate(a) for a in alumnos_orm]
+
+def assign_alumno_to_equipo(db: Session, id_alumno: int, id_equipo: int) -> Alumno:
+    alumno = db.query(AlumnoORM).filter(AlumnoORM.id_alumno == id_alumno).first()
+    if not alumno:
+        raise HTTPException(status_code=404, detail="Alumno no encontrado")
+    
+    from app.infrastructure.orm_models import EquipoORM
+    equipo = db.query(EquipoORM).filter(EquipoORM.id_equipo == id_equipo).first()
+    if not equipo:
+        raise HTTPException(status_code=404, detail="Equipo no encontrado")
+        
+    alumno.id_equipo = id_equipo
+    db.commit()
+    db.refresh(alumno)
+    return Alumno.model_validate(alumno)
+
+def unassign_alumno(db: Session, id_alumno: int) -> Alumno:
+    alumno = db.query(AlumnoORM).filter(AlumnoORM.id_alumno == id_alumno).first()
+    if not alumno:
+        raise HTTPException(status_code=404, detail="Alumno no encontrado")
+        
+    alumno.id_equipo = None
+    db.commit()
+    db.refresh(alumno)
+    return Alumno.model_validate(alumno)
