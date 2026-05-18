@@ -70,11 +70,33 @@ class Grupo(GrupoInput):
     class Config:
         from_attributes = True
 
+class AlumnoDetail(AlumnoBase):
+    id_alumno: int
+    id_equipo: Optional[int] = None
+
+    class Config:
+        from_attributes = True
+
+
+
 # Equipos
 class Equipo(BaseModel):
     id_equipo: int
     nombre_equipo: str
     id_grupo: int
+
+    class Config:
+        from_attributes = True
+
+class EquipoDetail(Equipo):
+    integrantes: List[AlumnoDetail] = []
+
+    class Config:
+        from_attributes = True
+
+class GrupoDetail(Grupo):
+    materia: Materia
+    equipos: List[EquipoDetail] = []
 
     class Config:
         from_attributes = True
